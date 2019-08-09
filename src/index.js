@@ -33,23 +33,23 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000`;
+  uri: `ws://localhost:4000`,
   options: {
     reconnect: true,
     connectionParams: {
-      authToken: localStorage.getItem(AUTH_TOKEN);
+      authToken: localStorage.getItem(AUTH_TOKEN)
     }
   }
-})
+});
 
 const link = split(
   ({ query }) => {
     const { kind, operation } = getMainDefinition(query);
-    return kind === 'OperationDefinition' && operation === 'subscription'
+    return kind === 'OperationDefinition' && operation === 'subscription';
   },
-  wsLink, 
+  wsLink,
   authLink.concat(httpLink)
-)
+);
 
 // 3
 const client = new ApolloClient({
